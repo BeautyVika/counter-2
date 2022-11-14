@@ -1,5 +1,7 @@
 import React from 'react';
-import {Button} from "../Button/Button";
+import {SuperButton} from "../SuperButton/SuperButton";
+import s from './Counter.module.css'
+import {ButtonGroup, Typography} from "@mui/material";
 
 type CounterPropsType= {
     currentCount: number
@@ -22,14 +24,20 @@ export const Counter = (props: CounterPropsType) => {
     const disabled = props.currentCount === props.maxValue
 
     return(
-        <div>
-            <div>{props.currentCount}</div>
+        <div className={s.counter}>
+            <Typography variant={'h4'}
+                        align={'center'}
+                        color={'primary'}
+                        className={props.currentCount === props.maxValue ? 'current' : ''}>
+                {props.currentCount}
+            </Typography>
 
-            <div>
-                <Button title={'inc'} disabled={disabled} callback={onIncCounter} />
-                <Button title={'reset'} callback={onResetCounter} />
-                <Button title={'set'} callback={onSetCounter} />
-
+            <div className={s.btnGroup}>
+                <ButtonGroup aria-label="outlined primary button group">
+                    <SuperButton title={'inc'} disabled={disabled} callback={onIncCounter} style={{marginRight: '3px'}}/>
+                    <SuperButton title={'reset'} callback={onResetCounter} style={{marginRight: '3px'}}/>
+                    <SuperButton title={'set'} callback={onSetCounter} />
+                </ButtonGroup>
             </div>
         </div>
     )

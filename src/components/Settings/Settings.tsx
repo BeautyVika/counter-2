@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button} from "../Button/Button";
+import {SuperButton} from "../SuperButton/SuperButton";
 import {Input} from "../Input/Input";
+import s from './Settings.module.css'
 
 type SettingsPropsType = {
     maxValue: number
@@ -22,24 +23,29 @@ export const Settings = (props: SettingsPropsType) => {
         props.onMinValueChange(value)
     }
     const disabled = props.maxValue === props.minValue || props.minValue < 0 || props.minValue > props.maxValue
+
+    const classNameInput = (props.maxValue <= props.minValue || props.minValue < 0 || props.maxValue < 0)
+        ? s.valueInput + ' ' + s.error : s.valueInput
+
     return (
-        <div>
-            <div>
-                <span>max value</span>
+        <div className={s.settings}>
+            <div className={s.max}>
+                <span className={s.value}>max value</span>
                 <Input value={props.maxValue}
                        callback={onMaxValueChange}
-                       title='number' />
+                       title='number'
+                       className={classNameInput}/>
             </div>
-            <div>
-                <span>min value</span>
+            <div className={s.max}>
+                <span className={s.value}>min value</span>
                 <Input value={props.minValue}
                        title='number'
-                       callback={onMinValueChange}/>
-
+                       callback={onMinValueChange}
+                       className={classNameInput}/>
             </div>
 
-           <div>
-               <Button title={'set'}
+           <div className={s.btn}>
+               <SuperButton title={'set'}
                        callback={onSetSettings}
                        disabled={disabled}/>
            </div>
