@@ -26,6 +26,7 @@ export const Counter = (props: CounterPropsType) => {
     return(
         <div className={s.counter}>
             <Typography variant={'h4'}
+                        style={{marginTop: '15px'}}
                         align={'center'}
                         color={'primary'}
                         className={props.currentCount === props.maxValue ? 'current' : ''}>
