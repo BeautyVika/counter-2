@@ -1,67 +1,59 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.css';
 import {Counter} from "./components/Counter/Counter";
 import {Settings} from "./components/Settings/Settings";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./state/store";
+import {
+    increaseValueAC,
+    maxValueChangeAC,
+    minValueChangeAC,
+    resetCounterAC,
+    setActiveCounterAC, setSettingsAC,
+    StateType
+} from "./state/value-reducer";
 
-function App() {
-    const [currentCount, setCurrentCount] = useState(0)
-    const [minValue, setMinValue] = useState(0)
-    const [maxValue, setMaxValue] = useState(5)
-    const [active, setActive] = useState(false)
+const App = () => {
 
-    useEffect(() => {
-        const valueMin = localStorage.getItem('minValue') ?? 0
-        const valueMax = localStorage.getItem('maxValue') ?? 0
-
-        setMinValue(+valueMin)
-        setMaxValue(+valueMax)
-
-    },[])
-
-    const setLocalStorage = () => {
-        localStorage.setItem('minValue', JSON.stringify(minValue))
-        localStorage.setItem('maxValue', JSON.stringify(maxValue))
-    }
+    const value = useSelector<AppRootStateType, StateType>(state => state.value)
+    const dispatch = useDispatch()
 
     const onIncCounter = () => {
-        if (currentCount < maxValue){
-            setCurrentCount(currentCount + 1)}
-    }
-    const onResetCounter =() => {
-        setCurrentCount(0)
+        if (value.currentCount < value.maxValue) {
+            dispatch(increaseValueAC())
+    }}
+
+    const onResetCounter = () => {
+        dispatch(resetCounterAC())
     }
     const onMaxValueChange = (value: number) => {
-        setMaxValue(value)
+        dispatch(maxValueChangeAC(value))
     }
     const onMinValueChange = (value: number) => {
-        setMinValue(value)
+        dispatch(minValueChangeAC(value))
     }
-    const onSetActiveCounter =() => {
-        setActive(!active)
+    const onSetActiveCounter = () => {
+        dispatch(setActiveCounterAC())
     }
     const onSetSettings = () => {
-        setActive(!active)
-        setCurrentCount(minValue)
-        setLocalStorage()
+        dispatch(setSettingsAC())
     }
 
-    return (
-        <div className="App">
-            {
-                active
-                ?  <Settings maxValue={maxValue}
-                             minValue={minValue}
-                             onSetSettings={onSetSettings}
-                             onMinValueChange={onMinValueChange}
-                             onMaxValueChange={onMaxValueChange}/>
-                :  <Counter currentCount={currentCount}
-                            maxValue={maxValue}
-                            onSetActiveCounter={onSetActiveCounter}
-                            onResetCounter={onResetCounter}
-                            onIncCounter={onIncCounter}/>
-            }
-        </div>
-    );
+    return <div className="App">
+        {
+            value.active
+                ? <Settings maxValue={value.maxValue}
+                            minValue={value.minValue}
+                            onSetSettings={onSetSettings}
+                            onMinValueChange={onMinValueChange}
+                            onMaxValueChange={onMaxValueChange}/>
+                : <Counter currentCount={value.currentCount}
+                           maxValue={value.maxValue}
+                           onSetActiveCounter={onSetActiveCounter}
+                           onResetCounter={onResetCounter}
+                           onIncCounter={onIncCounter}/>
+        }
+    </div>
 }
+export default App
 
-export default App;
