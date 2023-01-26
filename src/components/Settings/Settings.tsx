@@ -2,43 +2,42 @@ import React from 'react';
 import {SuperButton} from "../SuperButton/SuperButton";
 import {Input} from "../Input/Input";
 import s from './Settings.module.css'
+import {useDispatch, useSelector} from "react-redux";
+import {maxValueChangeAC, minValueChangeAC, setSettingsAC, StateType} from "../../bll/value-reducer";
+import {AppRootStateType} from "../../bll/store";
 
-type SettingsPropsType = {
-    maxValue: number
-    minValue: number
-    onSetSettings: () => void
-    onMaxValueChange: (value: number) => void
-    onMinValueChange: (value: number) => void
-}
 
-export const Settings = (props: SettingsPropsType) => {
+export const Settings: React.FC = () => {
+
+    const value = useSelector<AppRootStateType, StateType>(state => state.value)
+    const dispatch = useDispatch()
 
     const onSetSettings =() => {
-        props.onSetSettings()
+        dispatch(setSettingsAC())
     }
     const onMaxValueChange = (value: number) => {
-        props.onMaxValueChange(value)
+        dispatch(maxValueChangeAC(value))
     }
     const onMinValueChange = (value: number) => {
-        props.onMinValueChange(value)
+        dispatch(minValueChangeAC(value))
     }
-    const disabled = props.maxValue === props.minValue || props.minValue < 0 || props.minValue > props.maxValue
+    const disabled = value.maxValue === value.minValue || value.minValue < 0 || value.minValue > value.maxValue
 
-    const classNameInput = (props.maxValue <= props.minValue || props.minValue < 0 || props.maxValue < 0)
+    const classNameInput = (value.maxValue <= value.minValue || value.minValue < 0 || value.maxValue < 0)
         ? s.valueInput + ' ' + s.error : s.valueInput
 
     return (
         <div className={s.settings}>
             <div className={s.max}>
                 <span className={s.value}>max value</span>
-                <Input value={props.maxValue}
+                <Input value={value.maxValue}
                        callback={onMaxValueChange}
                        title='number'
                        className={classNameInput}/>
             </div>
             <div className={s.max}>
                 <span className={s.value}>min value</span>
-                <Input value={props.minValue}
+                <Input value={value.minValue}
                        title='number'
                        callback={onMinValueChange}
                        className={classNameInput}/>

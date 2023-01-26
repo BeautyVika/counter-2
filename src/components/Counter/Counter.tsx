@@ -2,26 +2,26 @@ import React from 'react';
 import {SuperButton} from "../SuperButton/SuperButton";
 import s from './Counter.module.css'
 import {ButtonGroup, Typography} from "@mui/material";
+import {incValueTC, resetCounterAC, setActiveCounterAC, StateType} from "../../bll/value-reducer";
+import {AppDispatch, AppRootStateType} from "../../bll/store";
+import {useSelector} from "react-redux";
 
-type CounterPropsType= {
-    currentCount: number
-    maxValue: number
-    onIncCounter: () => void
-    onResetCounter: () => void
-    onSetActiveCounter: () => void
-}
+export const Counter: React.FC = () => {
 
-export const Counter = (props: CounterPropsType) => {
+    const value = useSelector<AppRootStateType, StateType>(state => state.value)
+    const dispatch = AppDispatch()
+
     const onIncCounter = () => {
-        props.onIncCounter()
+        dispatch(incValueTC(value.currentCount+1))
     }
+
     const onResetCounter =() => {
-        props.onResetCounter()
+        dispatch(resetCounterAC())
     }
     const onSetCounter = () => {
-        props.onSetActiveCounter()
+        dispatch(setActiveCounterAC())
     }
-    const disabled = props.currentCount === props.maxValue
+    const disabled = value.currentCount === value.maxValue
 
     return(
         <div className={s.counter}>
@@ -29,8 +29,8 @@ export const Counter = (props: CounterPropsType) => {
                         style={{marginTop: '15px'}}
                         align={'center'}
                         color={'primary'}
-                        className={props.currentCount === props.maxValue ? 'current' : ''}>
-                {props.currentCount}
+                        className={value.currentCount === value.maxValue ? 'current' : ''}>
+                {value.currentCount}
             </Typography>
 
             <div className={s.btnGroup}>
