@@ -2,17 +2,17 @@ import React from 'react';
 import {SuperButton} from "../SuperButton/SuperButton";
 import s from './Counter.module.css'
 import {ButtonGroup, Typography} from "@mui/material";
-import {incValueTC, resetCounterAC, setActiveCounterAC, StateType} from "../../bll/value-reducer";
-import {AppDispatch, AppRootStateType} from "../../bll/store";
-import {useSelector} from "react-redux";
+import {increaseValueAC, resetCounterAC, setActiveCounterAC, StateType} from "../../bll/value-reducer";
+import {AppRootStateType} from "../../bll/store";
+import {useDispatch, useSelector} from "react-redux";
 
 export const Counter: React.FC = () => {
 
     const value = useSelector<AppRootStateType, StateType>(state => state.value)
-    const dispatch = AppDispatch()
+    const dispatch = useDispatch()
 
     const onIncCounter = () => {
-        dispatch(incValueTC(value.currentCount+1))
+        dispatch(increaseValueAC())
     }
 
     const onResetCounter =() => {

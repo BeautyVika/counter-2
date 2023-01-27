@@ -1,16 +1,21 @@
 import {valueReducer} from "./value-reducer";
-import {AnyAction, applyMiddleware, combineReducers, legacy_createStore} from "redux";
-import thunk, {ThunkDispatch} from "redux-thunk";
-import {useDispatch} from "react-redux";
+import {combineReducers, legacy_createStore} from "redux";
+import {loadState, saveState} from "../utils/localStorage-utils";
 
 
 const rootReducer = combineReducers({
-    value: valueReducer
+    value: valueReducer,
 })
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 
-type AppDispatchType = ThunkDispatch<AppRootStateType, any, AnyAction>
-export const AppDispatch = () => useDispatch<AppDispatchType>()
+export const store = legacy_createStore(rootReducer, loadState())
 
+store.subscribe(() => {
+   saveState({
+       value: store.getState().value
+   })
+})
 export type AppRootStateType = ReturnType<typeof rootReducer>
+
+
+
